@@ -26,6 +26,7 @@ class CategoryViewSet(viewsets.ModelViewSet):
 
 
 class TitlesViewSet(viewsets.ModelViewSet):
+    queryset = Titles.objects.all()
     serializer_class = TitleSerializer
     permission_classes = [IsAuthenticated,
                           IsAuthenticatedOrReadOnly,]
@@ -37,6 +38,7 @@ class TitlesViewSet(viewsets.ModelViewSet):
 
 
 class GenreViewSet(viewsets.ModelViewSet):
+    queryset = Genre.objects.all()
     serializer_class = GenreSerializer
     permission_classes = [IsAuthenticatedOrReadOnly,]
 
@@ -44,6 +46,7 @@ class GenreViewSet(viewsets.ModelViewSet):
         serializer.save(user=self.request.user)
 
 class GenreTitleViewSet(viewsets.ModelViewSet):
+    queryset = GenreTitle.objects.all()
     serializer_class = GenreTitleSerializer
     permission_classes = [IsAuthenticatedOrReadOnly,]
 
