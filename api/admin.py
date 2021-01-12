@@ -12,6 +12,7 @@ class ReviewInline(admin.TabularInline):
 class CommentInline(admin.TabularInline):
     model = Comment
     extra = 0
+    show_change_link = True
 
 
 @admin.register(Category)
@@ -29,6 +30,7 @@ class GenreAdmin(admin.ModelAdmin):
 @admin.register(Title)
 class TitleAdmin(admin.ModelAdmin):
     list_display = ('name', 'year', 'category')
+    list_filter = ('category', )
     search_fields = ('name', )
     inlines = [ReviewInline, ]
 
@@ -37,3 +39,8 @@ class TitleAdmin(admin.ModelAdmin):
 class ReviewAdmin(admin.ModelAdmin):
     list_display = ('title_id', 'text', 'score', 'author')
     inlines = [CommentInline, ]
+
+
+@admin.register(Comment)
+class CommentAdmin(admin.ModelAdmin):
+    list_display = ('review_id', 'text', 'author')
