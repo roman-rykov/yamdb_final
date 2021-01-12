@@ -105,7 +105,7 @@ class Comment(models.Model):
         to=Review,
         on_delete=models.CASCADE,
         related_name='comments',
-        verbose_name='комментарий',
+        verbose_name='id отзыва',
     )
     text = models.TextField(verbose_name='текст', max_length=500)
     author = models.ForeignKey(
