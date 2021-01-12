@@ -72,12 +72,12 @@ class Review(models.Model):
         to=Title,
         on_delete=models.CASCADE,
         related_name='reviews',
-        verbose_name='ID произведения',
+        verbose_name='id произведения',
     )
     text = models.TextField(verbose_name='текст', max_length=2000)
     score = models.IntegerField(
         verbose_name='оценка',
-        validators=[MinValueValidator(1), MaxValueValidator(10)],
+        validators=[MinValueValidator(1), MaxValueValidator(10)],  # TODO: возможно, следует заменить на choices
     )
     author = models.ForeignKey(
         to=User,
