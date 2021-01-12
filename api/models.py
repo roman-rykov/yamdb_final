@@ -1,3 +1,5 @@
+import datetime
+
 from django.contrib.auth import get_user_model
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
@@ -17,25 +19,6 @@ class Category(models.Model):
         verbose_name_plural = 'категории'
 
 
-class Title(models.Model):
-    name = models.CharField(verbose_name='название', max_length=200)
-    year = models.IntegerField(verbose_name='год')  # TODO: сделать ограничение
-    category = models.ForeignKey(
-        to=Category,
-        on_delete=models.SET_NULL,
-        related_name='titles',
-        verbose_name='категория',
-        null=True,
-    )
-
-    def __str__(self):
-        return self.name
-
-    class Meta:
-        verbose_name = 'произведение'
-        verbose_name_plural = 'произведения'
-
-
 class Genre(models.Model):
     name = models.CharField(verbose_name='название', max_length=100)
     slug = models.SlugField(unique=True)
@@ -48,26 +31,40 @@ class Genre(models.Model):
         verbose_name_plural = 'жанры'
 
 
-class GenreTitle(models.Model):
-    title_id = models.ForeignKey(
-        to=Title,
-        on_delete=models.CASCADE,
-        related_name='genres',
-        verbose_name='ID произведения',
+class Title(models.Model):
+    name = models.CharField(verbose_name='название', max_length=200)
+    year = models.IntegerField(
+        verbose_name='год',
+        blank=True,
+        null=True,
+        validators=[MaxValueValidator(datetime.date.today().year)],
     )
-    genre_id = models.ForeignKey(
-        to=Genre,
-        on_delete=models.CASCADE,
+    description = models.TextField(
+        verbose_name='описание',
+        max_length=2000,
+        blank=True,
+    )
+    category = models.ForeignKey(
+        to=Category,
+        on_delete=models.SET_NULL,
         related_name='titles',
-        verbose_name='ID жанра',
+        verbose_name='категория',
+        blank=True,
+        null=True,
+    )
+    genre = models.ManyToManyField(
+        to=Genre,
+        related_name='titles',
+        blank=True,
+        verbose_name='жанры',
     )
 
+    def __str__(self):
+        return self.name
+
     class Meta:
-        constraints = [
-            models.UniqueConstraint(
-                fields=('title_id', 'genre_id'), name='unique constraint',
-            ),
-        ]
+        verbose_name = 'произведение'
+        verbose_name_plural = 'произведения'
 
 
 class Review(models.Model):
