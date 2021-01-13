@@ -6,7 +6,12 @@ from rest_framework.routers import DefaultRouter
 from rest_framework_simplejwt.views import (TokenObtainPairView,
                                             TokenRefreshView)
 
-from .views import CommentModelViewSet, ReviewModelViewSet
+from .views import (
+    CommentModelViewSet,
+    ReviewModelViewSet,
+    CategoryViewSet,
+    GenreViewSet,
+)
 
 router = DefaultRouter()
 router.register(
@@ -18,6 +23,16 @@ router.register(
     r'titles/(?P<title_id>\d+)/reviews/(?P<review_id>\d+)/comments',
     CommentModelViewSet,
     'comment',
+)
+router.register(
+    'categories',
+    CategoryViewSet,
+    'categorys',
+)
+router.register(
+    'genres',
+    GenreViewSet,
+    'genres'
 )
 
 urlpatterns = [
