@@ -1,6 +1,5 @@
 from django.urls import include, path
 
-from rest_framework.authtoken.views import obtain_auth_token
 from rest_framework.routers import DefaultRouter
 
 from rest_framework_simplejwt.views import (TokenObtainPairView,
@@ -8,13 +7,13 @@ from rest_framework_simplejwt.views import (TokenObtainPairView,
 
 from .views import CommentModelViewSet, ReviewModelViewSet
 
-router = DefaultRouter()
-router.register(
+v1_router = DefaultRouter()
+v1_router.register(
     r'titles/(?P<title_id>\d+)/reviews',
     ReviewModelViewSet,
     'review',
 )
-router.register(
+v1_router.register(
     r'titles/(?P<title_id>\d+)/reviews/(?P<review_id>\d+)/comments',
     CommentModelViewSet,
     'comment',
@@ -22,25 +21,21 @@ router.register(
 
 urlpatterns = [
     path(
-        'api-auth/',
+        'v1/api-auth/',
         include('rest_framework.urls', namespace='rest_framework'),
     ),
     path(
-        'api-token-auth/',
-        obtain_auth_token,
-    ),
-    path(
-        'token/',
+        'v1/token/',
         TokenObtainPairView.as_view(),
         name='token_obtain_pair'
     ),
     path(
-        'token/refresh/',
+        'v1/token/refresh/',
         TokenRefreshView.as_view(),
         name='token_refresh'
     ),
     path(
-        '',
-        include(router.urls),
+        'v1/',
+        include(v1_router.urls),
     ),
 ]
