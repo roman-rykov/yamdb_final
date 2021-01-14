@@ -33,10 +33,6 @@ class CommentSerializer(serializers.ModelSerializer):
 
 
 class CategorySerializer(serializers.ModelSerializer):
-    # slug = serializers.SlugRelatedField(
-    #     slug_field='slug',
-    #     read_only=True,
-    #     default=serializers.CurrentUserDefault())
 
     class Meta:
         fields = ['name', 'slug']
@@ -44,10 +40,6 @@ class CategorySerializer(serializers.ModelSerializer):
 
 
 class GenreSerializer(serializers.ModelSerializer):
-    # slug = serializers.SlugRelatedField(
-    #     slug_field='slug',
-    #     read_only=True,
-    #     default=serializers.CurrentUserDefault())
 
     class Meta:
         fields = ['name', 'slug']

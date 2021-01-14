@@ -1,10 +1,5 @@
 from rest_framework import filters, mixins, pagination, viewsets
 from rest_framework.generics import get_object_or_404
-from rest_framework.permissions import (
-    IsAuthenticated,
-    IsAuthenticatedOrReadOnly,
-)
-from rest_framework.response import Response
 
 from .models import Category, Genre, Review, Title
 from .permissions import IsAuthorOrReadOnly, IsStaffOrReadOnly
@@ -72,8 +67,6 @@ class CategoryViewSet(mixins.CreateModelMixin,
     pagination_class.page_size = 20
     permission_classes = [IsStaffOrReadOnly]
 
-    def list(self, request, *args, **kwargs):
-        queryset = self.filter_queryset(self.get_queryset())
 
 class GenreViewSet(mixins.CreateModelMixin,
                    mixins.DestroyModelMixin,
@@ -87,8 +80,6 @@ class GenreViewSet(mixins.CreateModelMixin,
     pagination_class = pagination.PageNumberPagination
     pagination_class.page_size = 20
     permission_classes = [IsStaffOrReadOnly]
-
-    permission_classes = [IsAuthenticatedOrReadOnly, AdminForCreator]
 
     def perform_create(self, serializer):
         serializer.save()
