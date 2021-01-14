@@ -1,6 +1,8 @@
 from rest_framework import serializers
+from django.contrib.auth import get_user_model
+from .models import Comment, Review, Category, Genre, Title
 
-from .models import Comment, Review
+User = get_user_model()
 
 
 class ReviewSerializer(serializers.ModelSerializer):
@@ -30,3 +32,36 @@ class CommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comment
         fields = ['id', 'text', 'author', 'pub_date']
+
+
+class CategorySerializer(serializers.ModelSerializer):
+    # slug = serializers.SlugRelatedField(
+    #     slug_field='slug',
+    #     read_only=True,
+    #     default=serializers.CurrentUserDefault())
+
+    class Meta:
+        fields = ('__all__')
+        model = Category
+
+
+class GenreSerializer(serializers.ModelSerializer):
+    # slug = serializers.SlugRelatedField(
+    #     slug_field='slug',
+    #     read_only=True,
+    #     default=serializers.CurrentUserDefault())
+
+    class Meta:
+        fields = ('__all__')
+        model = Genre
+
+class TitleSerializer(serializers.ModelSerializer):
+    name = serializers.SlugRelatedField(
+        slug_field='name',
+        read_only=True,
+        default=serializers.CurrentUserDefault())
+
+    class Meta:
+        fields = ('__all__')
+        model = Title
+

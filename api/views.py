@@ -1,9 +1,27 @@
 from rest_framework import pagination
+from rest_framework.response import Response
+
+from .paginator import CustomPagination
 from rest_framework import viewsets
 from rest_framework.generics import get_object_or_404
+from rest_framework.pagination import PageNumberPagination
+from rest_framework.permissions import IsAuthenticatedOrReadOnly, \
+    IsAuthenticated
 
-from .models import Review, Title
-from .serializers import CommentSerializer, ReviewSerializer
+from .models import (
+    Review,
+    Title,
+    Category,
+    Genre
+                     )
+from .permission import AdminForCreator
+from .serializers import (
+    CommentSerializer,
+    ReviewSerializer,
+    CategorySerializer,
+    TitleSerializer,
+    GenreSerializer
+                          )
 
 
 class ReviewModelViewSet(viewsets.ModelViewSet):
@@ -45,3 +63,59 @@ class CommentModelViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(author=self.request.user, review_id=self.get_review())
+
+
+class CategoryViewSet(viewsets.ModelViewSet):
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
+    pagination_class = pagination.PageNumberPagination
+    pagination_class.page_size = 20
+    permission_classes = [IsAuthenticatedOrReadOnly, AdminForCreator]
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
+
+    def perform_destroy(self, instance):
+        instance.delete()
+        # queryset = get_object_or_404(Category, slug=instance)
+
+
+
+    def perform_create(self, serializer):
+        serializer.save()
+
+
+class GenreViewSet(viewsets.ModelViewSet):
+    queryset = Genre.objects.all()
+    serializer_class = GenreSerializer
+    pagination_class = pagination.PageNumberPagination
+    pagination_class.page_size = 20
+
+    permission_classes = [IsAuthenticatedOrReadOnly, AdminForCreator]
+
+    def perform_create(self, serializer):
+        serializer.save()
+
+
+class TitleViewSet(viewsets.ModelViewSet):
+    queryset = Title.objects.all()
+    serializer_class = TitleSerializer
+    permission_classes = [IsAuthenticated,
+                          IsAuthenticatedOrReadOnly,]
+    # filter_backends = [filters.SearchFilter]
+    # search_fields = ['user__username', 'following']
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+
+
+
+
