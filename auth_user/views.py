@@ -11,6 +11,9 @@ from .serializer import UserSerializer
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from rest_framework import filters
+from .permissions import IsAdministrator, IsModerator, IsUser
+from rest_framework.decorators import permission_classes
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
 
 User = get_user_model()
 
@@ -39,6 +42,23 @@ class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     filter_backends = [filters.SearchFilter]
-    http_method_names = ['get', 'post', 'patch', 'delete']
     search_fields = ['username',] 
     lookup_field = 'username'
+    permission_classes = [IsAdministrator,]
+    
+
+@permission_classes(IsAuthenticated,)
+@api_view(['GET', 'PATCH'])
+def get_info_me(requests):
+    if not requests.user.is_anonymous:
+        user = User.objects.filter(username=requests.user)[0]
+        if requests.method == 'GET':
+            serializer = UserSerializer(user)
+            return Response(serializer.data)
+        if requests.method == 'PATCH':
+            serializer = UserSerializer(user, data=requests.data, partial=True)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    return Response(status=status.HTTP_401_UNAUTHORIZED)

@@ -7,7 +7,9 @@ from django.views.decorators.csrf import csrf_exempt
 v1_router = DefaultRouter()
 v1_router.register(r'users', views.UserViewSet, basename='users')
 
+
 urlpatterns = [
+    path('v1/users/me/', views.get_info_me),
     path('v1/', include(v1_router.urls)),
     path("v1/token/", csrf_exempt(views.get_token), name="token_obtain_pair"),
     path('v1/auth/email/', csrf_exempt(views.email)),
