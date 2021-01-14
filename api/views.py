@@ -108,6 +108,8 @@ class TitleViewSet(viewsets.ModelViewSet):
     queryset = Title.objects.all()
     serializer_class = TitleSerializer
     permission_classes = [IsStaffOrReadOnly]
+    pagination_class = pagination.PageNumberPagination
+    pagination_class.page_size = 20
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
