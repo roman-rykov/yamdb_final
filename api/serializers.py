@@ -39,7 +39,7 @@ class CategorySerializer(serializers.ModelSerializer):
     #     default=serializers.CurrentUserDefault())
 
     class Meta:
-        fields = ('__all__')
+        fields = ['name', 'slug']
         model = Category
 
 
@@ -50,7 +50,7 @@ class GenreSerializer(serializers.ModelSerializer):
     #     default=serializers.CurrentUserDefault())
 
     class Meta:
-        fields = ('__all__')
+        fields = ['name', 'slug']
         model = Genre
 
 
