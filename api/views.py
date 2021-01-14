@@ -1,4 +1,4 @@
-from rest_framework import pagination, viewsets
+from rest_framework import filters, pagination, viewsets
 from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import (
     IsAuthenticated,
@@ -62,6 +62,9 @@ class CommentModelViewSet(viewsets.ModelViewSet):
 class CategoryViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['name', ]
+    lookup_field = 'slug'
     pagination_class = pagination.PageNumberPagination
     pagination_class.page_size = 20
     permission_classes = [IsStaffOrReadOnly]
@@ -88,6 +91,9 @@ class CategoryViewSet(viewsets.ModelViewSet):
 class GenreViewSet(viewsets.ModelViewSet):
     queryset = Genre.objects.all()
     serializer_class = GenreSerializer
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['name', ]
+    lookup_field = 'slug'
     pagination_class = pagination.PageNumberPagination
     pagination_class.page_size = 20
     permission_classes = [IsStaffOrReadOnly]
