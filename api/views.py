@@ -7,7 +7,7 @@ from rest_framework.permissions import (
 from rest_framework.response import Response
 
 from .models import Category, Genre, Review, Title
-from .permission import AdminForCreator
+from .permissions import IsAuthorOrReadOnly, IsStaffOrReadOnly
 from .serializers import (
     CategorySerializer,
     CommentSerializer,
@@ -21,7 +21,7 @@ class ReviewModelViewSet(viewsets.ModelViewSet):
     serializer_class = ReviewSerializer
     pagination_class = pagination.PageNumberPagination
     pagination_class.page_size = 20
-    # permission_classes = [...]
+    permission_classes = [IsAuthorOrReadOnly]
 
     def get_title(self):
         return get_object_or_404(Title, id=self.kwargs.get('title_id'))
@@ -38,7 +38,7 @@ class CommentModelViewSet(viewsets.ModelViewSet):
     serializer_class = CommentSerializer
     pagination_class = pagination.PageNumberPagination
     pagination_class.page_size = 20
-    # permission_classes = [...]
+    permission_classes = [IsAuthorOrReadOnly]
 
     def get_title(self):
         return get_object_or_404(Title, id=self.kwargs.get('title_id'))
@@ -64,7 +64,7 @@ class CategoryViewSet(viewsets.ModelViewSet):
     serializer_class = CategorySerializer
     pagination_class = pagination.PageNumberPagination
     pagination_class.page_size = 20
-    permission_classes = [IsAuthenticatedOrReadOnly, AdminForCreator]
+    permission_classes = [IsStaffOrReadOnly]
 
     def list(self, request, *args, **kwargs):
         queryset = self.filter_queryset(self.get_queryset())
@@ -90,6 +90,7 @@ class GenreViewSet(viewsets.ModelViewSet):
     serializer_class = GenreSerializer
     pagination_class = pagination.PageNumberPagination
     pagination_class.page_size = 20
+    permission_classes = [IsStaffOrReadOnly]
 
     permission_classes = [IsAuthenticatedOrReadOnly, AdminForCreator]
 
@@ -100,9 +101,7 @@ class GenreViewSet(viewsets.ModelViewSet):
 class TitleViewSet(viewsets.ModelViewSet):
     queryset = Title.objects.all()
     serializer_class = TitleSerializer
-    permission_classes = [IsAuthenticated, IsAuthenticatedOrReadOnly]
-    # filter_backends = [filters.SearchFilter]
-    # search_fields = ['user__username', 'following']
+    permission_classes = [IsStaffOrReadOnly]
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
