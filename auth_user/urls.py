@@ -12,6 +12,8 @@ v1_router.register('users', views.UserViewSet, basename='users')
 
 
 urlpatterns = [
+    path('v1/api-auth/',
+         include('rest_framework.urls', namespace='rest_framework')),
     path("v1/token/", csrf_exempt(views.get_token), name="token_obtain_pair"),
     path('v1/token/refresh/',
          TokenRefreshView.as_view(),
