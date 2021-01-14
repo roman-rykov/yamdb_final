@@ -1,5 +1,6 @@
 from rest_framework import filters, mixins, pagination, viewsets
 from rest_framework.generics import get_object_or_404
+from rest_framework.permissions import SAFE_METHODS
 
 from .models import Category, Genre, Review, Title
 from .permissions import IsAuthorOrReadOnly, IsStaffOrReadOnly
@@ -8,6 +9,7 @@ from .serializers import (
     CommentSerializer,
     GenreSerializer,
     ReviewSerializer,
+    TitleCUDSerializer,
     TitleSerializer,
 )
 
@@ -92,5 +94,7 @@ class TitleViewSet(viewsets.ModelViewSet):
     pagination_class = pagination.PageNumberPagination
     pagination_class.page_size = 20
 
-    def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
+    def get_serializer_class(self):
+        if self.request.method not in SAFE_METHODS:
+            return TitleCUDSerializer
+        return super().get_serializer_class()

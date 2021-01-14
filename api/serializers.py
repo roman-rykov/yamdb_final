@@ -47,11 +47,23 @@ class GenreSerializer(serializers.ModelSerializer):
 
 
 class TitleSerializer(serializers.ModelSerializer):
-    name = serializers.SlugRelatedField(
-        slug_field='name',
-        read_only=True,
-        default=serializers.CurrentUserDefault())
+    category = CategorySerializer(read_only=True)
+    genre = GenreSerializer(read_only=True, many=True)
 
     class Meta:
-        fields = ('__all__')
+        fields = ['id', 'name', 'year', 'description', 'category', 'genre']
         model = Title
+
+
+class TitleCUDSerializer(TitleSerializer):
+    category = serializers.SlugRelatedField(
+        slug_field='slug',
+        queryset=Category.objects.all(),
+        required=False,
+    )
+    genre = serializers.SlugRelatedField(
+        slug_field='slug',
+        many=True,
+        queryset=Genre.objects.all(),
+        required=False,
+    )
