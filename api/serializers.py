@@ -1,8 +1,6 @@
 from rest_framework import serializers
-from django.contrib.auth import get_user_model
-from .models import Comment, Review, Category, Genre, Title
 
-User = get_user_model()
+from .models import Category, Comment, Genre, Review, Title
 
 
 class ReviewSerializer(serializers.ModelSerializer):
@@ -55,6 +53,7 @@ class GenreSerializer(serializers.ModelSerializer):
         fields = ('__all__')
         model = Genre
 
+
 class TitleSerializer(serializers.ModelSerializer):
     name = serializers.SlugRelatedField(
         slug_field='name',
@@ -64,4 +63,3 @@ class TitleSerializer(serializers.ModelSerializer):
     class Meta:
         fields = ('__all__')
         model = Title
-

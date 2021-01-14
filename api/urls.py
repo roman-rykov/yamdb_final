@@ -3,10 +3,10 @@ from django.urls import include, path
 from rest_framework.routers import DefaultRouter
 
 from .views import (
-    CommentModelViewSet,
-    ReviewModelViewSet,
     CategoryViewSet,
+    CommentModelViewSet,
     GenreViewSet,
+    ReviewModelViewSet,
 )
 
 v1_router = DefaultRouter()

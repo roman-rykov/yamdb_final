@@ -6,4 +6,3 @@ class AdminForCreator(BasePermission):
         if request.method in SAFE_METHODS:
             return True
         return 'A' == request.user.customUser.role
-
