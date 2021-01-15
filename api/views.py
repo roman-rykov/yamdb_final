@@ -3,6 +3,7 @@ from django.db.models import Avg
 from django_filters.rest_framework import DjangoFilterBackend
 
 from rest_framework import filters, mixins, pagination, viewsets
+from rest_framework.exceptions import ValidationError
 from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import SAFE_METHODS
 
@@ -33,6 +34,9 @@ class ReviewModelViewSet(viewsets.ModelViewSet):
         return title.reviews.all()
 
     def perform_create(self, serializer):
+        queryset = self.get_queryset()
+        if queryset.filter(author=self.request.user, title_id=self.get_title()).exists():
+            raise ValidationError({'non_field_errors': ['cannot add another review']})
         serializer.save(author=self.request.user, title_id=self.get_title())
 
 
