@@ -1,7 +1,10 @@
+from django_filters.rest_framework import DjangoFilterBackend
+
 from rest_framework import filters, mixins, pagination, viewsets
 from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import SAFE_METHODS
 
+from .filters import TitleFilter
 from .models import Category, Genre, Review, Title
 from .permissions import IsAuthorOrReadOnly, IsStaffOrReadOnly
 from .serializers import (
@@ -91,6 +94,8 @@ class TitleViewSet(viewsets.ModelViewSet):
     queryset = Title.objects.all()
     serializer_class = TitleSerializer
     permission_classes = [IsStaffOrReadOnly]
+    filter_backends = [DjangoFilterBackend]
+    filter_class = TitleFilter
     pagination_class = pagination.PageNumberPagination
     pagination_class.page_size = 20
 
