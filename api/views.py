@@ -1,3 +1,5 @@
+from django.db.models import Avg
+
 from django_filters.rest_framework import DjangoFilterBackend
 
 from rest_framework import filters, mixins, pagination, viewsets
@@ -91,7 +93,7 @@ class GenreViewSet(mixins.CreateModelMixin,
 
 
 class TitleViewSet(viewsets.ModelViewSet):
-    queryset = Title.objects.all()
+    queryset = Title.objects.annotate(rating=Avg('reviews__score')).all()
     serializer_class = TitleSerializer
     permission_classes = [IsStaffOrReadOnly]
     filter_backends = [DjangoFilterBackend]
