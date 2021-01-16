@@ -63,6 +63,7 @@ class UserMeViewSet(viewsets.ViewSet):
     def partial_update(self, request):
         user = User.objects.filter(username=request.user)[0]
         serializer = UserSerializer(user, data=request.data, partial=True)
+
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data,
