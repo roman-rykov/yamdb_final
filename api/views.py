@@ -102,8 +102,9 @@ class GenreViewSet(mixins.CreateModelMixin,
 
 
 class TitleViewSet(viewsets.ModelViewSet):
-    queryset = Title.objects.annotate(rating=Avg('reviews__score')).all()
-    serializer_class = TitleSerializer
+    queryset = Title.objects.prefetch_related(
+        'genre', 'category',
+    ).annotate(rating=Avg('reviews__score')).all()
     permission_classes = [IsStaffOrReadOnly]
     filter_backends = [DjangoFilterBackend]
     filter_class = TitleFilter
@@ -113,4 +114,4 @@ class TitleViewSet(viewsets.ModelViewSet):
     def get_serializer_class(self):
         if self.request.method not in SAFE_METHODS:
             return TitleCUDSerializer
-        return super().get_serializer_class()
+        return TitleSerializer
