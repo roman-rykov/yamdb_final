@@ -1,6 +1,7 @@
 from django.contrib.auth.tokens import default_token_generator
 from django.core.mail import send_mail
 from django.http import JsonResponse
+
 from rest_framework_simplejwt.serializers import User
 from rest_framework.decorators import api_view
 from rest_framework_simplejwt.tokens import AccessToken
@@ -8,8 +9,8 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework import viewsets
 from rest_framework import filters
-from rest_framework.decorators import permission_classes
 from rest_framework.permissions import IsAuthenticated
+
 from .serializer import UserSerializer
 from .models import User
 from .permissions import IsAdministrator
