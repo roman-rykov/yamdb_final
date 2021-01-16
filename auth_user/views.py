@@ -50,21 +50,21 @@ class UserViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAdministrator, ]
 
 
-@permission_classes(IsAuthenticated,)
-@api_view(['GET', 'PATCH'])
-def get_info_me(request):
-    if not request.user.is_anonymous:
+class UserMeViewSet(viewsets.ViewSet):
+    permission_classes = (IsAuthenticated,)
+    http_methods = ('get', 'patch')
+
+    def retrieve(self, request):
+        queryset = User.objects.filter(username=request.user)[0]
+        serializer = UserSerializer(queryset)
+        return Response(serializer.data)
+
+    def partial_update(self, request):
         user = User.objects.filter(username=request.user)[0]
-        if request.method == 'GET':
-            serializer = UserSerializer(user)
-            return Response(serializer.data)
-        if request.method == 'PATCH':
-            serializer = UserSerializer(user,
-                                        data=request.data, partial=True)
-            if serializer.is_valid():
-                serializer.save()
-                return Response(serializer.data,
-                                status=status.HTTP_200_OK)
-            return Response(serializer.errors,
-                            status=status.HTTP_400_BAD_REQUEST)
-    return Response(status=status.HTTP_401_UNAUTHORIZED)
+        serializer = UserSerializer(user, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data,
+                            status=status.HTTP_200_OK)
+        return Response(serializer.errors,
+                        status=status.HTTP_400_BAD_REQUEST)
