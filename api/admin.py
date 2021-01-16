@@ -31,14 +31,14 @@ class GenreAdmin(admin.ModelAdmin):
 class TitleAdmin(admin.ModelAdmin):
     list_display = ('name', 'year', 'category')
     list_filter = ('category', 'genre')
-    search_fields = ('name', )
-    inlines = [ReviewInline, ]
+    search_fields = ('name',)
+    inlines = [ReviewInline,]
 
 
 @admin.register(Review)
 class ReviewAdmin(admin.ModelAdmin):
     list_display = ('title_id', 'text', 'score', 'author')
-    inlines = [CommentInline, ]
+    inlines = [CommentInline,]
 
 
 @admin.register(Comment)

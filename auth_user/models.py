@@ -6,7 +6,7 @@ from django.contrib.auth import get_user_model
 
 class CustomUser(AbstractUser):
     bio = models.TextField(max_length=500, blank=True)
-    email = models.EmailField(_('email'), unique=True)
+    email = models.EmailField(_('email'), unique=True, db_index=True)
     ROLE_CHOICES = [
         ('user', 'User'),
         ('moderator', 'Moderator'),

@@ -2,7 +2,6 @@ from django.urls import include, path
 from django.views.decorators.csrf import csrf_exempt
 
 from rest_framework.routers import DefaultRouter
-
 from rest_framework_simplejwt.views import TokenRefreshView
 
 from . import views
