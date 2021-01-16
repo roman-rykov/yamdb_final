@@ -15,6 +15,7 @@ class Category(models.Model):
         return self.name
 
     class Meta:
+        ordering = ['name']
         verbose_name = 'категория'
         verbose_name_plural = 'категории'
 
@@ -27,6 +28,7 @@ class Genre(models.Model):
         return self.name
 
     class Meta:
+        ordering = ['name']
         verbose_name = 'жанр'
         verbose_name_plural = 'жанры'
 
@@ -63,6 +65,7 @@ class Title(models.Model):
         return self.name
 
     class Meta:
+        ordering = ['category', 'name']
         verbose_name = 'произведение'
         verbose_name_plural = 'произведения'
 
@@ -77,7 +80,7 @@ class Review(models.Model):
     text = models.TextField(verbose_name='текст', max_length=2000)
     score = models.IntegerField(
         verbose_name='оценка',
-        validators=[MinValueValidator(1), MaxValueValidator(10)],  # TODO: возможно, следует заменить на choices
+        validators=[MinValueValidator(1), MaxValueValidator(10)],
     )
     author = models.ForeignKey(
         to=User,
@@ -91,6 +94,7 @@ class Review(models.Model):
         return f'{self.author} on {self.pub_date}: {self.text[:50]}'
 
     class Meta:
+        ordering = ['title_id', 'pub_date']
         verbose_name = 'отзыв'
         verbose_name_plural = 'отзывы'
         constraints = [
@@ -120,5 +124,6 @@ class Comment(models.Model):
         return f'{self.author} on {self.pub_date}: {self.text[:50]}'
 
     class Meta:
+        ordering = ['review_id', 'pub_date']
         verbose_name = 'комментарий'
         verbose_name_plural = 'комментарии'
