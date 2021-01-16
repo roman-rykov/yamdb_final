@@ -11,7 +11,7 @@ from rest_framework import viewsets
 from rest_framework import filters
 from rest_framework.permissions import IsAuthenticated
 
-from .serializer import UserSerializer
+from .serializer import UserSerializer, UserMeSerializers
 from .models import User
 from .permissions import IsAdministrator
 
@@ -62,7 +62,7 @@ class UserMeViewSet(viewsets.ViewSet):
 
     def partial_update(self, request):
         user = User.objects.filter(username=request.user)[0]
-        serializer = UserSerializer(user, data=request.data, partial=True)
+        serializer = UserMeSerializers(user, data=request.data, partial=True)
 
         if serializer.is_valid():
             serializer.save()
