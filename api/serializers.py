@@ -12,13 +12,6 @@ class ReviewSerializer(serializers.ModelSerializer):
     class Meta:
         model = Review
         fields = ['id', 'text', 'author', 'score', 'pub_date']
-        # validators = [
-        #     serializers.UniqueTogetherValidator(
-        #         queryset=Review.objects.all(),
-        #         fields=('title_id', 'author'),
-        #         message='cannot add another review'
-        #     )
-        # ]
 
 
 class CommentSerializer(serializers.ModelSerializer):

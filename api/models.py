@@ -80,7 +80,7 @@ class Review(models.Model):
     text = models.TextField(verbose_name='текст', max_length=2000)
     score = models.IntegerField(
         verbose_name='оценка',
-        validators=[MinValueValidator(1), MaxValueValidator(10)],  # TODO: возможно, следует заменить на choices
+        validators=[MinValueValidator(1), MaxValueValidator(10)],
     )
     author = models.ForeignKey(
         to=User,

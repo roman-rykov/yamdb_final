@@ -34,14 +34,12 @@ class ReviewModelViewSet(viewsets.ModelViewSet):
         return title.reviews.all()
 
     def perform_create(self, serializer):
-
         validate_uniqueness(
             queryset=self.get_queryset(),
             message='cannot add another review',
             author=self.request.user,
             title_id=self.get_title(),
         )
-
         serializer.save(author=self.request.user, title_id=self.get_title())
 
 
@@ -97,9 +95,6 @@ class GenreViewSet(mixins.CreateModelMixin,
     pagination_class.page_size = 20
     permission_classes = [IsStaffOrReadOnly]
 
-    def perform_create(self, serializer):
-        serializer.save()
-
 
 class TitleViewSet(viewsets.ModelViewSet):
     queryset = Title.objects.prefetch_related(
@@ -107,7 +102,7 @@ class TitleViewSet(viewsets.ModelViewSet):
     ).annotate(rating=Avg('reviews__score')).all()
     permission_classes = [IsStaffOrReadOnly]
     filter_backends = [DjangoFilterBackend]
-    filter_class = TitleFilter
+    filterset_class = TitleFilter
     pagination_class = pagination.PageNumberPagination
     pagination_class.page_size = 20
 
