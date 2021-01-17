@@ -8,3 +8,7 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = ('first_name', 'last_name',
                   'username', 'bio', 'email', 'role')
+
+
+class EmailSerializer(serializers.Serializer):
+    email = serializers.EmailField()
