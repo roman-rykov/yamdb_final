@@ -11,7 +11,7 @@ from rest_framework import viewsets
 from rest_framework import filters
 from rest_framework.permissions import IsAuthenticated
 
-from .serializer import UserSerializer, UserMeSerializers
+from .serializer import UserSerializer
 from .models import User
 from .permissions import IsAdministrator
 
@@ -20,7 +20,8 @@ from .permissions import IsAdministrator
 def email(requests):
     """Send confirmation_code by email."""
     email = requests.POST['email']
-    user = User.objects.get_or_create(username=email, email=email, is_active=False)[0]
+    user = User.objects.get_or_create(
+        username=email, email=email, is_active=False)[0]
     confirmation_code = default_token_generator.make_token(user)
     send_mail('Подтверждение регистрации',
               f'Пожалуйста, сохраните этот код : {confirmation_code},'
@@ -48,9 +49,9 @@ class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     filter_backends = [filters.SearchFilter]
-    search_fields = ['username',]
+    search_fields = ['username', ]
     lookup_field = 'username'
-    permission_classes = [IsAdministrator,]
+    permission_classes = [IsAdministrator, ]
 
     @action(
         detail=False,
@@ -63,7 +64,8 @@ class UserViewSet(viewsets.ModelViewSet):
             serializer = UserSerializer(user)
             return Response(serializer.data)
         if request.method == 'PATCH':
-            serializer = UserMeSerializers(user, data=request.data, partial=True)
+            serializer = UserSerializer(
+                user, data=request.data, partial=True)
             if serializer.is_valid():
                 serializer.save()
                 return Response(serializer.data,
