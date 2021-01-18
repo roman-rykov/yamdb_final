@@ -2,7 +2,7 @@ from django.db.models import Avg
 
 from django_filters.rest_framework import DjangoFilterBackend
 
-from rest_framework import filters, mixins, pagination, viewsets
+from rest_framework import filters, mixins, viewsets
 from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import SAFE_METHODS
 
@@ -22,8 +22,6 @@ from .validators import validate_uniqueness
 
 class ReviewModelViewSet(viewsets.ModelViewSet):
     serializer_class = ReviewSerializer
-    pagination_class = pagination.PageNumberPagination
-    pagination_class.page_size = 20
     permission_classes = [IsAuthorOrReadOnly]
 
     def get_title(self):
@@ -45,8 +43,6 @@ class ReviewModelViewSet(viewsets.ModelViewSet):
 
 class CommentModelViewSet(viewsets.ModelViewSet):
     serializer_class = CommentSerializer
-    pagination_class = pagination.PageNumberPagination
-    pagination_class.page_size = 20
     permission_classes = [IsAuthorOrReadOnly]
 
     def get_title(self):
@@ -77,8 +73,6 @@ class CategoryViewSet(mixins.CreateModelMixin,
     filter_backends = [filters.SearchFilter]
     search_fields = ['name', ]
     lookup_field = 'slug'
-    pagination_class = pagination.PageNumberPagination
-    pagination_class.page_size = 20
     permission_classes = [IsStaffOrReadOnly]
 
 
@@ -91,8 +85,6 @@ class GenreViewSet(mixins.CreateModelMixin,
     filter_backends = [filters.SearchFilter]
     search_fields = ['name', ]
     lookup_field = 'slug'
-    pagination_class = pagination.PageNumberPagination
-    pagination_class.page_size = 20
     permission_classes = [IsStaffOrReadOnly]
 
 
@@ -103,8 +95,6 @@ class TitleViewSet(viewsets.ModelViewSet):
     permission_classes = [IsStaffOrReadOnly]
     filter_backends = [DjangoFilterBackend]
     filterset_class = TitleFilter
-    pagination_class = pagination.PageNumberPagination
-    pagination_class.page_size = 20
 
     def get_serializer_class(self):
         if self.request.method not in SAFE_METHODS:
