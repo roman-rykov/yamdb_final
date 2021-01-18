@@ -17,51 +17,48 @@ from .serializers import (
     TitleCUDSerializer,
     TitleSerializer,
 )
-from .validators import validate_uniqueness
+
+
+def get_title(view):
+    return get_object_or_404(Title, id=view.kwargs.get('title_id'))
+
+
+def get_review(view):
+    review = get_object_or_404(
+        Review,
+        id=view.kwargs.get('review_id'),
+        title_id=get_title(view),
+    )
+    return review
 
 
 class ReviewModelViewSet(viewsets.ModelViewSet):
     serializer_class = ReviewSerializer
     permission_classes = [IsAuthorOrReadOnly]
 
-    def get_title(self):
-        return get_object_or_404(Title, id=self.kwargs.get('title_id'))
-
     def get_queryset(self):
-        title = self.get_title()
+        title = get_title(self)
         return title.reviews.all()
 
-    def perform_create(self, serializer):
-        validate_uniqueness(
-            queryset=self.get_queryset(),
-            message='cannot add another review',
-            author=self.request.user,
-            title_id=self.get_title(),
-        )
-        serializer.save(author=self.request.user, title_id=self.get_title())
+    def create(self, request, *args, **kwargs):
+        # Passing request data to the serializer
+        request.data._mutable = True
+        request.data['title_id'] = get_title(self).id
+        request.data['author'] = self.request.user.username
+        request.data._mutable = False
+        return super().create(request, *args, **kwargs)
 
 
 class CommentModelViewSet(viewsets.ModelViewSet):
     serializer_class = CommentSerializer
     permission_classes = [IsAuthorOrReadOnly]
 
-    def get_title(self):
-        return get_object_or_404(Title, id=self.kwargs.get('title_id'))
-
-    def get_review(self):
-        review = get_object_or_404(
-            Review,
-            id=self.kwargs.get('review_id'),
-            title_id=self.get_title(),
-        )
-        return review
-
     def get_queryset(self):
-        review = self.get_review()
+        review = get_review(self)
         return review.comments.all()
 
     def perform_create(self, serializer):
-        serializer.save(author=self.request.user, review_id=self.get_review())
+        serializer.save(author=self.request.user, review_id=get_review(self))
 
 
 class CategoryViewSet(mixins.CreateModelMixin,
