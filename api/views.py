@@ -32,6 +32,13 @@ def get_review(view):
     return review
 
 
+class CreateDestroyListViewSet(mixins.CreateModelMixin,
+                               mixins.DestroyModelMixin,
+                               mixins.ListModelMixin,
+                               viewsets.GenericViewSet):
+    pass
+
+
 class ReviewModelViewSet(viewsets.ModelViewSet):
     serializer_class = ReviewSerializer
     permission_classes = [IsAuthor | IsModerator]
@@ -61,10 +68,7 @@ class CommentModelViewSet(viewsets.ModelViewSet):
         serializer.save(author=self.request.user, review_id=get_review(self))
 
 
-class CategoryViewSet(mixins.CreateModelMixin,
-                      mixins.DestroyModelMixin,
-                      mixins.ListModelMixin,
-                      viewsets.GenericViewSet):
+class CategoryViewSet(CreateDestroyListViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
     filter_backends = [filters.SearchFilter]
@@ -73,10 +77,7 @@ class CategoryViewSet(mixins.CreateModelMixin,
     permission_classes = [IsAdmin]
 
 
-class GenreViewSet(mixins.CreateModelMixin,
-                   mixins.DestroyModelMixin,
-                   mixins.ListModelMixin,
-                   viewsets.GenericViewSet):
+class GenreViewSet(CreateDestroyListViewSet):
     queryset = Genre.objects.all()
     serializer_class = GenreSerializer
     filter_backends = [filters.SearchFilter]
