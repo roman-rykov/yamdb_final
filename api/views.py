@@ -8,7 +8,7 @@ from rest_framework.permissions import SAFE_METHODS
 
 from .filters import TitleFilter
 from .models import Category, Genre, Review, Title
-from .permissions import IsAuthorOrReadOnly, IsStaffOrReadOnly
+from .permissions import IsAdmin, IsAuthor, IsModerator
 from .serializers import (
     CategorySerializer,
     CommentSerializer,
@@ -34,7 +34,7 @@ def get_review(view):
 
 class ReviewModelViewSet(viewsets.ModelViewSet):
     serializer_class = ReviewSerializer
-    permission_classes = [IsAuthorOrReadOnly]
+    permission_classes = [IsAuthor | IsModerator]
 
     def get_queryset(self):
         title = get_title(self)
@@ -51,7 +51,7 @@ class ReviewModelViewSet(viewsets.ModelViewSet):
 
 class CommentModelViewSet(viewsets.ModelViewSet):
     serializer_class = CommentSerializer
-    permission_classes = [IsAuthorOrReadOnly]
+    permission_classes = [IsAuthor | IsModerator]
 
     def get_queryset(self):
         review = get_review(self)
@@ -70,7 +70,7 @@ class CategoryViewSet(mixins.CreateModelMixin,
     filter_backends = [filters.SearchFilter]
     search_fields = ['name', ]
     lookup_field = 'slug'
-    permission_classes = [IsStaffOrReadOnly]
+    permission_classes = [IsAdmin]
 
 
 class GenreViewSet(mixins.CreateModelMixin,
@@ -82,14 +82,14 @@ class GenreViewSet(mixins.CreateModelMixin,
     filter_backends = [filters.SearchFilter]
     search_fields = ['name', ]
     lookup_field = 'slug'
-    permission_classes = [IsStaffOrReadOnly]
+    permission_classes = [IsAdmin]
 
 
 class TitleViewSet(viewsets.ModelViewSet):
     queryset = Title.objects.prefetch_related(
         'genre', 'category',
     ).annotate(rating=Avg('reviews__score')).all()
-    permission_classes = [IsStaffOrReadOnly]
+    permission_classes = [IsAdmin]
     filter_backends = [DjangoFilterBackend]
     filterset_class = TitleFilter
 
