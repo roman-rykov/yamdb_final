@@ -11,7 +11,7 @@ class ReviewSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Review
-        fields = ['id', 'text', 'author', 'score', 'pub_date', 'title_id']
+        fields = '__all__'
         validators = [
             validators.UniqueTogetherValidator(
                 queryset=Review.objects.all(),
@@ -29,21 +29,21 @@ class CommentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Comment
-        fields = ['id', 'text', 'author', 'pub_date']
+        exclude = ['review_id', ]
 
 
 class CategorySerializer(serializers.ModelSerializer):
 
     class Meta:
-        fields = ['name', 'slug']
         model = Category
+        exclude = ['id', ]
 
 
 class GenreSerializer(serializers.ModelSerializer):
 
     class Meta:
-        fields = ['name', 'slug']
         model = Genre
+        exclude = ['id', ]
 
 
 class TitleSerializer(serializers.ModelSerializer):
