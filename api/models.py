@@ -8,7 +8,8 @@ User = get_user_model()
 
 
 class Category(models.Model):
-    name = models.CharField(verbose_name='название', max_length=100)
+    name = models.CharField(verbose_name='название', max_length=100,
+                            db_index=True)
     slug = models.SlugField(unique=True, blank=True)
 
     class Meta:
@@ -21,7 +22,8 @@ class Category(models.Model):
 
 
 class Genre(models.Model):
-    name = models.CharField(verbose_name='название', max_length=100)
+    name = models.CharField(verbose_name='название', max_length=100,
+                            db_index=True)
     slug = models.SlugField(unique=True, blank=True)
 
     class Meta:
@@ -34,7 +36,8 @@ class Genre(models.Model):
 
 
 class Title(models.Model):
-    name = models.CharField(verbose_name='название', max_length=200)
+    name = models.CharField(verbose_name='название', max_length=200,
+                            db_index=True)
     year = models.IntegerField(
         verbose_name='год',
         blank=True,
@@ -83,7 +86,6 @@ class Review(models.Model):
     text = models.TextField(verbose_name='текст', max_length=2000)
     score = models.IntegerField(
         verbose_name='оценка',
-        db_index=True,
         validators=[
             MinValueValidator(1, message=SCORE_MESSAGE),
             MaxValueValidator(10, message=SCORE_MESSAGE),
