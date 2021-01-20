@@ -17,15 +17,15 @@ class CustomUser(AbstractUser):
 
     @property
     def is_moderator(self):
-        return self.role == 'moderator'
+        return self.role == self.RoleChoices.moderator
 
     @property
     def is_admin(self):
-        return self.role == 'admin'
+        return self.role == self.RoleChoices.admin
 
     @property
     def is_user(self):
-        return self.role == 'user'
+        return self.role == self.RoleChoices.user
 
 
 User = get_user_model()

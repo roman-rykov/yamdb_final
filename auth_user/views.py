@@ -8,7 +8,7 @@ from rest_framework_simplejwt.serializers import User
 from rest_framework.decorators import action, api_view
 from rest_framework_simplejwt.tokens import AccessToken
 from rest_framework.response import Response
-from rest_framework import serializers, status
+from rest_framework import status
 from rest_framework import viewsets
 from rest_framework import filters
 from rest_framework.permissions import IsAuthenticated
@@ -19,10 +19,10 @@ from .permissions import IsAdministrator
 
 
 @api_view(['POST'])
-def email(requests):
+def email(request):
     """Send confirmation_code by email."""
-    email = requests.POST['email']
-    serializer = EmailSerializer(data={'email': email})
+    email = request.POST['email']
+    serializer = EmailSerializer(data=request.data)
     serializer.is_valid(raise_exception=True)
     user = User.objects.get_or_create(
         username=email, email=email, is_active=False)[0]
@@ -38,8 +38,8 @@ def email(requests):
 @api_view(['POST'])
 def get_token(request):
     """Generate access token."""
-    email = requests.POST['email']
-    serializer = EmailSerializer(data={'email': email})
+    email = request.POST['email']
+    serializer = EmailSerializer(data=request.data)
     serializer.is_valid(raise_exception=True)
     confirmation_code = request.POST['confirmation_code']
     user = get_object_or_404(User, email=email)
@@ -58,7 +58,7 @@ class UserViewSet(viewsets.ModelViewSet):
     filter_backends = [filters.SearchFilter]
     search_fields = ['username', ]
     lookup_field = 'username'
-    permission_classes = [IsAdministrator, ]
+    permission_classes = [IsAdministrator]
 
     @action(
         detail=False,

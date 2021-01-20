@@ -27,7 +27,7 @@ def get_review(view):
     review = get_object_or_404(
         Review,
         id=view.kwargs.get('review_id'),
-        title_id=get_title(view),
+        title_id=view.kwargs.get('title_id'),
     )
     return review
 
