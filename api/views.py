@@ -8,7 +8,7 @@ from rest_framework.permissions import SAFE_METHODS
 
 from .filters import TitleFilter
 from .models import Category, Genre, Review, Title
-from .permissions import IsAdmin, IsAuthor, IsModerator
+from .permissions import IsAdmin, IsAuthor, IsModerator, ReadOnly
 from .serializers import (
     CategorySerializer,
     CommentSerializer,
@@ -41,7 +41,7 @@ class CreateDestroyListViewSet(mixins.CreateModelMixin,
 
 class ReviewModelViewSet(viewsets.ModelViewSet):
     serializer_class = ReviewSerializer
-    permission_classes = [IsAuthor | IsModerator]
+    permission_classes = [ReadOnly | IsAuthor | IsModerator]
 
     def get_queryset(self):
         title = get_title(self)
@@ -53,7 +53,7 @@ class ReviewModelViewSet(viewsets.ModelViewSet):
 
 class CommentModelViewSet(viewsets.ModelViewSet):
     serializer_class = CommentSerializer
-    permission_classes = [IsAuthor | IsModerator]
+    permission_classes = [ReadOnly | IsAuthor | IsModerator]
 
     def get_queryset(self):
         review = get_review(self)
@@ -69,7 +69,7 @@ class CategoryViewSet(CreateDestroyListViewSet):
     filter_backends = [filters.SearchFilter]
     search_fields = ['name', ]
     lookup_field = 'slug'
-    permission_classes = [IsAdmin]
+    permission_classes = [ReadOnly | IsAdmin]
 
 
 class GenreViewSet(CreateDestroyListViewSet):
@@ -78,14 +78,14 @@ class GenreViewSet(CreateDestroyListViewSet):
     filter_backends = [filters.SearchFilter]
     search_fields = ['name', ]
     lookup_field = 'slug'
-    permission_classes = [IsAdmin]
+    permission_classes = [ReadOnly | IsAdmin]
 
 
 class TitleViewSet(viewsets.ModelViewSet):
     queryset = Title.objects.prefetch_related(
         'genre', 'category',
     ).annotate(rating=Avg('reviews__score')).all()
-    permission_classes = [IsAdmin]
+    permission_classes = [ReadOnly | IsAdmin]
     filter_backends = [DjangoFilterBackend]
     filterset_class = TitleFilter
 
