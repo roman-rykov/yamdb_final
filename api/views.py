@@ -47,13 +47,8 @@ class ReviewModelViewSet(viewsets.ModelViewSet):
         title = get_title(self)
         return title.reviews.all()
 
-    def create(self, request, *args, **kwargs):
-        # Passing request data to the serializer
-        request.data._mutable = True
-        request.data['title_id'] = get_title(self).id
-        request.data['author'] = self.request.user.username
-        request.data._mutable = False
-        return super().create(request, *args, **kwargs)
+    def perform_create(self, serializer):
+        serializer.save(author=self.request.user, title_id=get_title(self))
 
 
 class CommentModelViewSet(viewsets.ModelViewSet):

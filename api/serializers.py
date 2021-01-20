@@ -1,24 +1,28 @@
-from rest_framework import serializers, validators
+from rest_framework import serializers
 
-from .models import Category, Comment, Genre, Review, Title, User
+from .models import Category, Comment, Genre, Review, Title
 
 
 class ReviewSerializer(serializers.ModelSerializer):
     author = serializers.SlugRelatedField(
-        queryset=User.objects.all(),
         slug_field='username',
+        read_only=True,
     )
 
     class Meta:
         model = Review
         fields = '__all__'
-        validators = [
-            validators.UniqueTogetherValidator(
-                queryset=Review.objects.all(),
-                fields=['author', 'title_id'],
-                message='You cannot add another review on this title.'
-            ),
-        ]
+        read_only_fields = ['author', 'title_id']
+
+    def validate(self, attrs):
+        if self.context.get('request').method == 'POST':
+            title_id = self.context.get('view').kwargs.get('title_id')
+            user = self.context.get('request').user
+            if Review.objects.filter(title_id=title_id, author=user).exists():
+                raise serializers.ValidationError(
+                    'Вы уже написали ревью на это произведение'
+                )
+        return attrs
 
 
 class CommentSerializer(serializers.ModelSerializer):
