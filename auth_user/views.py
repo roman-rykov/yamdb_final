@@ -58,7 +58,7 @@ class UserViewSet(viewsets.ModelViewSet):
     filter_backends = [filters.SearchFilter]
     search_fields = ['username', ]
     lookup_field = 'username'
-    permission_classes = [IsAdministrator]
+    permission_classes = [IsAuthenticated, IsAdministrator]
 
     @action(
         detail=False,
