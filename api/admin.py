@@ -29,7 +29,14 @@ class GenreAdmin(admin.ModelAdmin):
 
 @admin.register(Title)
 class TitleAdmin(admin.ModelAdmin):
-    list_display = ('name', 'year', 'category')
+    def reviews_count(self, obj):
+        return obj.reviews.count()
+
+    def rating(self, obj):
+        scores = [review.score for review in obj.reviews.all()]
+        return sum(scores)//len(scores)
+
+    list_display = ('name', 'year', 'category', 'reviews_count', 'rating')
     list_filter = ('category', 'genre')
     search_fields = ('name', )
     inlines = [ReviewInline, ]
