@@ -8,9 +8,11 @@ from rest_framework.permissions import SAFE_METHODS
 
 from .filters import TitleFilter
 from .models import Category, Genre, Review, Title
-from .permissions import (IsAuthorOrAuthenticated,
-                          IsModeratorOrReadOnly,
-                          IsAdminOrReadOnly)
+from .permissions import (
+    IsAdminOrReadOnly,
+    IsAuthorOrAuthenticated,
+    IsModeratorOrReadOnly,
+)
 from .serializers import (
     CategorySerializer,
     CommentSerializer,
