@@ -16,6 +16,7 @@ auth_paths = [
          TokenRefreshView.as_view(),
          name='token_refresh'),
     path('email/', csrf_exempt(views.email)),
+    path('web/', include('rest_framework.urls', namespace='rest_framework')),
 ]
 
 urlpatterns = [
