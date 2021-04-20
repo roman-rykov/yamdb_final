@@ -7,20 +7,20 @@ Django 3.0.5
 Django REST framework 3.11.0  
 Docker 3.8
 ### Запуск проекта в Docker-контейнерах
-- Установите [Docker](https://www.docker.com/get-started)
+- Установите [Docker](https://www.docker.com/get-started) и [Docker Compose](https://docs.docker.com/compose/install/)
 - Клонируйте репозиторий:
 ```bash
 git clone https://github.com/roman-rykov/infra_sp2
 ```
 - Перейдите в папку с проектом:
 ```bash
-cd infra_sp2
+cd infra_sp2/
 ```
 - Создайте файл `.env`
 ```bash
 touch .env
 ```
-- Запишите в `.env` следующее содержимое
+- Запишите в `.env` следующее содержимое:
 ```bash
 DJANGO_SECRET_KEY=mydjangosecretkey # Измените это
 DB_ENGINE=django.db.backends.postgresql
@@ -38,12 +38,12 @@ docker-compose up
 - В новом окне терминала перейдите в папку с проектом, выполните миграции, заполните базу тестовыми данными и создайте суперпользователя:
 ```bash
 # Выполнение миграций
-docker-compose exec web python manage.py makemigrations --noinput
-docker-compose exec web python manage.py migrate --noinput
+docker-compose exec web python manage.py makemigrations
+docker-compose exec web python manage.py migrate
 # Перенос статических файлов
 docker-compose exec web python manage.py collectstatic --noinput 
 # Заполнение базы данных
-docker-compose exec web python manage.py loaddata fixtures.json --noinput
+docker-compose exec web python manage.py loaddata fixtures.json
 # Создание суперпользователя
 docker-compose exec web python manage.py createsuperuser
 ```
