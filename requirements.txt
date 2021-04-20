@@ -26,6 +26,8 @@ djangorestframework==3.11.0
     # via
     #   -r requirements.in
     #   djangorestframework-simplejwt
+gunicorn==20.1.0
+    # via -r requirements.in
 idna==2.9
     # via requests
 more-itertools==8.2.0
@@ -34,6 +36,8 @@ packaging==20.3
     # via pytest
 pluggy==0.13.1
     # via pytest
+psycopg2-binary==2.8.6
+    # via -r requirements.in
 py==1.8.1
     # via pytest
 pyjwt==1.7.1
@@ -56,3 +60,6 @@ urllib3==1.25.9
     # via requests
 wcwidth==0.1.9
     # via pytest
+
+# The following packages are considered to be unsafe in a requirements file:
+# setuptools
