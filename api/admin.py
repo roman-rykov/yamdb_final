@@ -34,7 +34,7 @@ class TitleAdmin(admin.ModelAdmin):
 
     def rating(self, obj):
         scores = [review.score for review in obj.reviews.all()]
-        return sum(scores)//len(scores)
+        return sum(scores) // len(scores)
 
     list_display = ('name', 'year', 'category', 'reviews_count', 'rating')
     list_filter = ('category', 'genre')
