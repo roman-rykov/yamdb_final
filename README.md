@@ -1,3 +1,4 @@
+[![CI](https://github.com/roman-rykov/yamdb_final/actions/workflows/yamdb_workflow.yaml/badge.svg)](https://github.com/roman-rykov/yamdb_final/actions/workflows/yamdb_workflow.yaml)
 # YaMDb
 ### Описание
 Проект **YaMDb** собирает отзывы пользователей на произведения. Произведения делятся на категории: «Книги», «Фильмы», «Музыка».
@@ -10,11 +11,11 @@ Docker 3.8
 - Установите [Docker](https://www.docker.com/get-started) и [Docker Compose](https://docs.docker.com/compose/install/)
 - Клонируйте репозиторий:
 ```bash
-git clone https://github.com/roman-rykov/infra_sp2
+git clone https://github.com/roman-rykov/yamdb_final
 ```
 - Перейдите в папку с проектом:
 ```bash
-cd infra_sp2/
+cd yamdb_final/
 ```
 - Создайте файл `.env`
 ```bash
