@@ -1,0 +1,8 @@
+pytest-django
+requests
+django
+django-filter
+djangorestframework
+djangorestframework-simplejwt
+gunicorn
+psycopg2-binary

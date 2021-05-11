@@ -1,0 +1,34 @@
+# Repository-specific files
+.git
+.gitignore
+requirements.in
+
+# Docker
+Dockerfile
+docker-compose.yaml
+docker-compose.yml
+compose.yaml
+compose.yml
+.dockerignore
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+.vscode/
+
+# Папки, создаваемые средой разработки
+.idea
+.DS_Store
+.AppleDouble
+.LSOverride
+
+*.sublime-project
+*.sublime-workspace
+
+.vscode/
+*.code-workspace
