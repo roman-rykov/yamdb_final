@@ -29,6 +29,7 @@ SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', default=get_random_secret_key()
 DEBUG = False
 
 ALLOWED_HOSTS = [
+    os.environ.get('HOST'),
     "localhost",
     "127.0.0.1",
     "[::1]",
