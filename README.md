@@ -3,10 +3,7 @@
 ### Описание
 Проект **YaMDb** собирает отзывы пользователей на произведения. Произведения делятся на категории: «Книги», «Фильмы», «Музыка».
 ### Технологии
-Python 3.8.5  
-Django 3.0.5  
-Django REST framework 3.11.0  
-Docker 3.8
+Проект написан на Python 3.8, использует Django 3.2 и Django REST Framework 3.12 и собирается в Docker-контейнерах.
 ### Запуск проекта в Docker-контейнерах
 - Установите [Docker](https://www.docker.com/get-started) и [Docker Compose](https://docs.docker.com/compose/install/)
 - Клонируйте репозиторий:
@@ -17,21 +14,11 @@ git clone https://github.com/roman-rykov/yamdb_final
 ```bash
 cd yamdb_final/
 ```
-- Создайте файл `.env`
+- Переименуйте `.env.example` в `.env`:
 ```bash
-touch .env
+mv .env.example .env
 ```
-- Запишите в `.env` следующее содержимое:
-```bash
-DJANGO_SECRET_KEY=mydjangosecretkey # Измените это
-DB_ENGINE=django.db.backends.postgresql
-DB_NAME=postgres
-POSTGRES_USER=postgres
-POSTGRES_PASSWORD=mypostgrespassword # Измените это
-DB_HOST=db
-DB_PORT=5432
-
-```
+- Добавьте значения ключей `DJANGO_SECRET_KEY` и `POSTGRES_PASSWORD` в файле `.env`
 - Cоберите и запустите контейнеры:
 ```bash
 docker-compose up
@@ -52,5 +39,7 @@ docker-compose exec web python manage.py createsuperuser
 ### Использование
 Подробная документация доступна по адресу http://127.0.0.1/redoc/  
 Web-интерфейс для API http://127.0.0.1/api/v1/titles/
+### Тестовая веб-версия
+Проверить работу сервиса вы можете на http://yamdb.gq/api/v1/
 ### Авторы
-Артем Богатов, Роман Рыков, Александр Фролов
+Артем Богатов, Роман Рыков, Александр Фролов.
