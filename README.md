@@ -1,5 +1,5 @@
 [![CI](https://github.com/roman-rykov/yamdb_final/actions/workflows/yamdb_workflow.yaml/badge.svg)](https://github.com/roman-rykov/yamdb_final/actions/workflows/yamdb_workflow.yaml)
-# YaMDb
+# [YaMDb](http://yamdb.gq/api/v1/)
 ### Описание
 Проект **YaMDb** собирает отзывы пользователей на произведения. Произведения делятся на категории: «Книги», «Фильмы», «Музыка».
 ### Технологии
